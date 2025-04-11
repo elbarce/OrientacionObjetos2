@@ -1,11 +1,11 @@
-##Ejercicio 2 
+## Ejercicio 2 
 Para cada una de las siguientes situaciones, realice en forma iterativa los siguientes pasos:
 (i) indique el mal olor,
 (ii) indique el refactoring que lo corrige, 
 (iii) aplique el refactoring, mostrando el resultado final (código y/o diseño según corresponda). 
 Si vuelve a encontrar un mal olor, retorne al paso (i).
 
-###2.1 Empleados
+## 2.1 Empleados
 
 ```java
 public class EmpleadoTemporario {
@@ -45,11 +45,11 @@ public class EmpleadoPasante {
 }
 ```
 ---
-##Resolución
+## Resolución
 ## 1) mal olor identificado: 
 código duplicado: las 3 clases definidas tienen atributos idénticos en común.
 ## refactoring propuesto:
-pull up field → en ppio debería permitir subir los atributos en común a una superclase de la que hereden las subclases
+pull up field → en ppio debería permitir subir los atributos en común a una superclase de la que hereden las subclases. creo una superclass Empleado que incluye los 3 atributos en común entre las 3 subclass. Luego hago que estas extiendan de Empleado para poder hacer uso de las mismas.
 
 ```java
 abstract class Empleado {
@@ -89,23 +89,13 @@ public class EmpleadoPasante extends Empleado {
 }
 
 ```
+---
+## 2) bad smell:
+ruptura de encapsulamiento: los atributos no deberían aparecer públicos.
+## refactoring:
+encapsulate fields → se trata de poner como privados o protegidos los atributos que se encuentran públicos. en este caso se hacen las dos cosas: primero ponemos como protegidas los atributos de la superclase, permitiendo el uso a las subclases. Por otra parte los atributos correspondientes a cada subclase se pondrán como privados, pero se deben crear getters y setter para los mismos.
 
-2) ruptura de encapsulamiento: los atributos no deberían aparecer públicos.
-3) métodos duplicados: las 3 clases tienen un método idéntico, que varía de acuerdo a su requerimiento únicamente.
-
-ii) en cada caso el refactoring que lo resuelve es:
-
-1) 
-2) encapsulate fields → se trata de poner como privados o protegidos los atributos que se encuentran públicos
-3) Para poder resolver el bad smell se harán dos refactoring: extract method y pull up method → El primero unifica el comportamiento común entre los 3 métodos. El segundo “sube” el método a la superclase desde la que se utilizará luego por herencia en cada subclase que lo requiera. 
-
-iii)
-1) creo una superclass Empleado que incluye los 3 atributos en común entre las 3 subclass. Luego hago que estas extiendan de Empleado para poder hacer uso de las mismas.
-
-
-
-2) en este caso se hacen las dos cosas: primero ponemos como protegidas los atributos de la superclase, permitiendo el uso a las subclases. Por otra parte los atributos correspondientes a cada subclase se pondrán como privados, pero se deben crear getters y setter para los mismos.
-
+```java
 abstract class Empleado {
     protected String nombre;
     protected String apellido;
@@ -163,9 +153,15 @@ public class EmpleadoPasante extends Empleado {
     }
 }
 
-3) Se considera que los tres métodos tienen un comportamiento en común. En este caso se hace el primer refactoring que es extract method: 
+```
+---
+## 3) bad smell: 
+métodos duplicados: las 3 clases tienen un método idéntico, que varía de acuerdo a su requerimiento únicamente.
+## refactoring: 
+Para poder resolver el bad smell se harán dos refactoring: extract method y pull up method → El primero unifica el comportamiento común entre los 3 métodos. El segundo “sube” el método a la superclase desde la que se utilizará luego por herencia en cada subclase que lo requiera. Se considera que los tres métodos tienen un comportamiento en común. En este caso se hace el primer refactoring que es extract method: 
 pongo un único ejemplo, ya que lo considero un caso intermedio: todas las clases ahora repiten el método
 
+```java
 public double sueldoBasico() {
         return this.sueldoBasico - (this.sueldoBasico * 0.13);
     }
@@ -237,13 +233,16 @@ public class EmpleadoPasante extends Empleado {
     // ......
 
 }
-
+```
+---
+## repaso en busca de nuevos bad smells
 Llegado a este punto, sigo encontrando BS: EmpleadoPlanta y EmpleadoPasante tienen en común un atributo que podría unificarse en una clase. 
 Esto reduciría parte del código repetido. Sucede lo mismo con la implementación de sueldo() que podría volver a unificarse (ASUMO QUE EL 
 HARDCODEO QUE PROPONEN ESTÁ EQUIVOCADO, Y LA IDEA ES QUE SEAN TODOS IGUALES). Luego de las modificaciones presentadas (en este caso son las 
 mismas que en la primera parte del ejercicio, vueltas a aplicar sobre la resultante de aquel) el código quedaría:
 
-abstract class Empleado {
+```java
+    abstract class Empleado {
     protected String nombre;
     protected String apellido;
     protected double sueldoBasico = 0;
@@ -291,7 +290,8 @@ public class EmpleadoPasante extends Empleado {
     // ......
 
 }
-
+```
+---
 LA DUDA QUE ME QUEDA ES SI LAS DOS ÚLTIMAS CLASES NO SON LAZY CLASS O SI ES NECESARIO QUE QUEDEN ASÍ PARA PODER SEPARAR SUS FUNCIONALIDADES. 
 
 
