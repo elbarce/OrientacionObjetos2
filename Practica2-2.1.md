@@ -1,12 +1,13 @@
-Ejercicio 2 
+##Ejercicio 2 
 Para cada una de las siguientes situaciones, realice en forma iterativa los siguientes pasos:
 (i) indique el mal olor,
 (ii) indique el refactoring que lo corrige, 
 (iii) aplique el refactoring, mostrando el resultado final (código y/o diseño según corresponda). 
 Si vuelve a encontrar un mal olor, retorne al paso (i).
 
-2.1 Empleados
+###2.1 Empleados
 
+```java
 public class EmpleadoTemporario {
     public String nombre;
     public String apellido;
@@ -42,24 +43,15 @@ public class EmpleadoPasante {
         return this.sueldoBasico - (this.sueldoBasico * 0.13);
     }
 }
+```
+---
+##Resolución
+## 1) mal olor identificado: 
+código duplicado: las 3 clases definidas tienen atributos idénticos en común.
+## refactoring propuesto:
+pull up field → en ppio debería permitir subir los atributos en común a una superclase de la que hereden las subclases
 
-Resolución
-
-i) mal olor identificado:
-
-1) código duplicado: las 3 clases definidas tienen atributos idénticos en común.
-2) ruptura de encapsulamiento: los atributos no deberían aparecer públicos.
-3) métodos duplicados: las 3 clases tienen un método idéntico, que varía de acuerdo a su requerimiento únicamente.
-
-ii) en cada caso el refactoring que lo resuelve es:
-
-1) pull up field → en ppio debería permitir subir los atributos en común a una superclase de la que hereden las subclases
-2) encapsulate fields → se trata de poner como privados o protegidos los atributos que se encuentran públicos
-3) Para poder resolver el bad smell se harán dos refactoring: extract method y pull up method → El primero unifica el comportamiento común entre los 3 métodos. El segundo “sube” el método a la superclase desde la que se utilizará luego por herencia en cada subclase que lo requiera. 
-
-iii)
-1) creo una superclass Empleado que incluye los 3 atributos en común entre las 3 subclass. Luego hago que estas extiendan de Empleado para poder hacer uso de las mismas.
-
+```java
 abstract class Empleado {
     public String nombre;
     public String apellido;
@@ -95,6 +87,21 @@ public class EmpleadoPasante extends Empleado {
         return this.sueldoBasico - (this.sueldoBasico * 0.13);
     }
 }
+
+```
+
+2) ruptura de encapsulamiento: los atributos no deberían aparecer públicos.
+3) métodos duplicados: las 3 clases tienen un método idéntico, que varía de acuerdo a su requerimiento únicamente.
+
+ii) en cada caso el refactoring que lo resuelve es:
+
+1) 
+2) encapsulate fields → se trata de poner como privados o protegidos los atributos que se encuentran públicos
+3) Para poder resolver el bad smell se harán dos refactoring: extract method y pull up method → El primero unifica el comportamiento común entre los 3 métodos. El segundo “sube” el método a la superclase desde la que se utilizará luego por herencia en cada subclase que lo requiera. 
+
+iii)
+1) creo una superclass Empleado que incluye los 3 atributos en común entre las 3 subclass. Luego hago que estas extiendan de Empleado para poder hacer uso de las mismas.
+
 
 
 2) en este caso se hacen las dos cosas: primero ponemos como protegidas los atributos de la superclase, permitiendo el uso a las subclases. Por otra parte los atributos correspondientes a cada subclase se pondrán como privados, pero se deben crear getters y setter para los mismos.
