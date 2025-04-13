@@ -105,20 +105,20 @@ de forma manual. Se reemplaza los recorridos en loop con un stream
 ```java
 private List<post> ordenarPosteosPorFecha (List<post> posteos){
     return posteos.stream()
-      .sorted((p1,p2) -> p1.getFecha().compareTo(p2.getFecha()))
-      .collect(Collectors.toList());
+        .sorted(Comparator.comparing(Post::getFecha()))
+        .collect(Collectors.toList());
 }
 
 private List<post> cargarUltimosNPostOtroUsuario (List<post> posteos, int cantidadN){
-    return posteos.stream()
-      .limit(cantidadN)
-      .collect(Collectors.toList());
+        return posteos.stream()
+                .limit(cantidadN)
+                .collect(Collectors.toList());
 }
 
 private List<post> getPostOtrosUsuarios (Usuario user){
-    return this.posts.stream()
-      .filter(posts -> !post.getUsuario().equals(user))
-      .collect(Collectors.toList());
+        return this.posts.stream()
+                .filter(posts -> !post.getUsuario().equals(user))
+                .collect(Collectors.toList());
 }
 
 ```
