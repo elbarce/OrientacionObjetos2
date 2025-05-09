@@ -1,0 +1,45 @@
+@startuml
+abstract class Trabajador{
+ #basico: int
+
+ {abstract} #getSueldoBasico(): double
+ {abstract} #getAdicional(): double
+ -getDescuento(): double
+ #sueldo(): double;
+}
+
+abstract class TrabajadorConFamilia Extends Trabajador{
+ #cantidadHijos: int
+ #adicional: int
+ #adicionalCasado: int
+ #adicionalHijo: int
+ #casado: boolean
+
+ {abstract} #getSueldoBasico(): double
+ #getAdicional(): double
+}
+
+class Temporario Extends TrabajadorConFamilia{
+ -horasTrabajadas: int
+
+ +getSueldoBasico(): double
+ +getAdicional(): double
+}
+
+class Pasante Extends Trabajador{
+ -adicional: int
+ -examenesRendidos: int
+
+ +getSueldoBasico(): double
+ +getAdicional(): double
+}
+
+class Planta Extends TrabajadorConFamilia{
+ -basico: int 
+ -adicionalAntiguedad: int
+ -aniosAntiguedad: int
+
+ +getSueldoBasico(): double
+ +getAdicional(): double
+}
+@enduml
